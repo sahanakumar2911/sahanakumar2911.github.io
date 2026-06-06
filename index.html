@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0a0a;
+    --surface: #111111;
+    --surface2: #1a1a1a;
+    --border: #2a2a2a;
+    --border-light: #333;
+    --text: #f0f0f0;
+    --text-muted: #888;
+    --text-dim: #555;
+    --accent: #f0f0f0;
+    --white: #ffffff;
+    --serif: 'DM Serif Display', serif;
+    --mono: 'DM Mono', monospace;
+    --sans: 'Instrument Sans', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.25rem 3rem;
+    background: rgba(10,10,10,0.9);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: var(--mono); font-size: 13px; letter-spacing: 0.08em;
+    color: var(--text-muted); text-decoration: none;
+  }
+  .nav-logo span { color: var(--text); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.1em;
+    color: var(--text-muted); text-decoration: none; text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+  .nav-edit-btn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em;
+    background: none; border: 1px solid var(--border-light); color: var(--text-muted);
+    padding: 0.4rem 1rem; cursor: pointer; transition: all 0.2s; text-transform: uppercase;
+  }
+  .nav-edit-btn:hover, .nav-edit-btn.active { border-color: var(--text); color: var(--text); background: var(--surface2); }
+  .nav-edit-btn.active { color: #f0c040; border-color: #f0c040; }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 3rem;
+    border-bottom: 1px solid var(--border);
+    position: relative; overflow: hidden;
+  }
+  .hero-grid-bg {
+    position: absolute; inset: 0; pointer-events: none;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 60px 60px;
+    opacity: 0.3;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+  }
+  .hero-index {
+    font-family: var(--mono); font-size: 11px; color: var(--text-dim);
+    letter-spacing: 0.1em; margin-bottom: 3rem;
+  }
+  .hero-name {
+    font-family: var(--serif); font-size: clamp(4rem, 10vw, 9rem);
+    font-weight: 400; line-height: 0.9; letter-spacing: -0.02em;
+    color: var(--white);
+  }
+  .hero-name em { font-style: italic; color: var(--text-muted); }
+  .hero-bottom {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    margin-top: 3rem;
+  }
+  .hero-tagline {
+    font-family: var(--mono); font-size: 13px; color: var(--text-muted);
+    max-width: 320px; line-height: 1.8;
+  }
+  .hero-scroll {
+    font-family: var(--mono); font-size: 11px; color: var(--text-dim);
+    letter-spacing: 0.1em; text-transform: uppercase; display: flex; align-items: center; gap: 0.5rem;
+  }
+  .hero-scroll::before {
+    content: ''; display: block; width: 40px; height: 1px; background: var(--text-dim);
+  }
+
+  /* ── SECTION WRAPPER ── */
+  section { padding: 5rem 3rem; border-bottom: 1px solid var(--border); position: relative; }
+  .section-label {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.15em; color: var(--text-dim);
+    text-transform: uppercase; margin-bottom: 3rem;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .section-label::after {
+    content: ''; flex: 1; height: 1px; background: var(--border);
+  }
+  .section-title {
+    font-family: var(--serif); font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 400; line-height: 1.1; margin-bottom: 2rem;
+  }
+
+  /* ── ABOUT ── */
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+  .about-bio { font-size: 1.15rem; line-height: 1.85; color: var(--text-muted); }
+  .about-bio p + p { margin-top: 1.2rem; }
+  .skills-list { display: flex; flex-direction: column; gap: 0; }
+  .skill-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0.85rem 0; border-bottom: 1px solid var(--border);
+    font-family: var(--mono); font-size: 13px;
+  }
+  .skill-name { color: var(--text-muted); }
+  .skill-tag { color: var(--text-dim); font-size: 11px; letter-spacing: 0.08em; }
+
+  /* ── EXPERIENCE ── */
+  .exp-list { display: flex; flex-direction: column; }
+  .exp-item {
+    display: grid; grid-template-columns: 200px 1fr;
+    padding: 2rem 0; border-bottom: 1px solid var(--border); gap: 3rem;
+  }
+  .exp-meta { font-family: var(--mono); font-size: 12px; color: var(--text-dim); line-height: 1.8; }
+  .exp-meta strong { color: var(--text-muted); display: block; margin-bottom: 0.25rem; }
+  .exp-content h3 { font-family: var(--serif); font-size: 1.5rem; font-weight: 400; margin-bottom: 0.5rem; }
+  .exp-content p { color: var(--text-muted); font-size: 14px; line-height: 1.8; }
+
+  /* ── BLOG ── */
+  .blog-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2px; margin-top: -2px; }
+  .blog-card {
+    background: var(--surface); padding: 2rem; cursor: pointer;
+    transition: background 0.2s; border: 1px solid transparent; position: relative;
+    display: flex; flex-direction: column;
+  }
+  .blog-card:hover { background: var(--surface2); border-color: var(--border-light); }
+  .blog-tag {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em;
+    color: var(--text-dim); text-transform: uppercase; margin-bottom: 1.25rem;
+  }
+  .blog-title { font-family: var(--serif); font-size: 1.35rem; font-weight: 400; line-height: 1.3; margin-bottom: 1rem; }
+  .blog-excerpt { font-size: 13px; color: var(--text-muted); line-height: 1.7; flex: 1; }
+  .blog-date { font-family: var(--mono); font-size: 11px; color: var(--text-dim); margin-top: 1.5rem; }
+  .blog-arrow {
+    position: absolute; bottom: 2rem; right: 2rem;
+    font-family: var(--mono); font-size: 16px; color: var(--text-dim);
+    transition: transform 0.2s, color 0.2s;
+  }
+  .blog-card:hover .blog-arrow { transform: translate(3px,-3px); color: var(--text); }
+
+  /* ── CONTACT ── */
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; }
+  .contact-cta { font-family: var(--serif); font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 400; line-height: 1.2; }
+  .contact-links { display: flex; flex-direction: column; gap: 0; }
+  .contact-link {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.1rem 0; border-bottom: 1px solid var(--border);
+    text-decoration: none; color: var(--text-muted); font-family: var(--mono); font-size: 13px;
+    transition: color 0.2s;
+  }
+  .contact-link:hover { color: var(--text); }
+  .contact-link span { font-size: 16px; }
+
+  /* ── RESUME BTN ── */
+  .resume-section { display: flex; align-items: center; gap: 3rem; }
+  .resume-info { flex: 1; }
+  .resume-info p { color: var(--text-muted); font-size: 14px; line-height: 1.8; max-width: 500px; }
+  .resume-btn {
+    display: inline-flex; align-items: center; gap: 0.75rem;
+    border: 1px solid var(--text); color: var(--text);
+    padding: 1rem 2rem; text-decoration: none; font-family: var(--mono); font-size: 12px;
+    letter-spacing: 0.1em; text-transform: uppercase; transition: all 0.2s; cursor: pointer;
+    background: none;
+  }
+  .resume-btn:hover { background: var(--white); color: var(--bg); }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 2rem 3rem; display: flex; justify-content: space-between; align-items: center;
+    font-family: var(--mono); font-size: 11px; color: var(--text-dim);
+  }
+
+  /* ── EDIT MODE ── */
+  body.edit-mode [contenteditable] {
+    outline: 1px dashed #f0c04055;
+    background: rgba(240,192,64,0.03);
+    border-radius: 2px;
+    cursor: text;
+    transition: outline 0.15s;
+  }
+  body.edit-mode [contenteditable]:hover { outline: 1px dashed #f0c040aa; }
+  body.edit-mode [contenteditable]:focus { outline: 2px solid #f0c040; background: rgba(240,192,64,0.06); }
+  .edit-hint {
+    display: none; position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);
+    background: #f0c040; color: #111; font-family: var(--mono); font-size: 11px;
+    padding: 0.5rem 1.5rem; letter-spacing: 0.08em; z-index: 200; white-space: nowrap;
+  }
+  body.edit-mode .edit-hint { display: block; }
+
+  /* ── BLOG POST MODAL ── */
+  .modal-backdrop {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92);
+    z-index: 300; overflow-y: auto; padding: 3rem;
+  }
+  .modal-backdrop.open { display: block; }
+  .modal {
+    max-width: 720px; margin: 0 auto; background: var(--surface);
+    border: 1px solid var(--border-light); padding: 3rem;
+  }
+  .modal-close {
+    display: flex; align-items: center; gap: 0.5rem; background: none; border: none;
+    color: var(--text-muted); font-family: var(--mono); font-size: 11px; cursor: pointer;
+    letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 2rem; padding: 0;
+  }
+  .modal-close:hover { color: var(--text); }
+  .modal-tag { font-family: var(--mono); font-size: 11px; color: var(--text-dim); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 1rem; }
+  .modal-title { font-family: var(--serif); font-size: clamp(2rem, 4vw, 3rem); font-weight: 400; line-height: 1.15; margin-bottom: 1.5rem; }
+  .modal-meta { font-family: var(--mono); font-size: 11px; color: var(--text-dim); margin-bottom: 2.5rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border); }
+  .modal-body { font-size: 15px; line-height: 1.9; color: var(--text-muted); }
+  .modal-body p + p { margin-top: 1.2rem; }
+
+  /* ── ADD BLOG POST ── */
+  .add-post-btn {
+    display: none; align-items: center; gap: 0.5rem;
+    border: 1px dashed var(--border-light); padding: 2rem; cursor: pointer;
+    background: none; color: var(--text-dim); font-family: var(--mono); font-size: 12px;
+    width: 100%; justify-content: center; letter-spacing: 0.08em; transition: all 0.2s;
+  }
+  body.edit-mode .add-post-btn { display: flex; }
+  .add-post-btn:hover { border-color: #f0c040; color: #f0c040; }
+
+  .post-delete-btn {
+    display: none; position: absolute; top: 1rem; right: 1rem;
+    background: none; border: 1px solid #c0404055; color: #c04040;
+    font-family: var(--mono); font-size: 10px; padding: 0.25rem 0.5rem; cursor: pointer;
+    letter-spacing: 0.08em;
+  }
+  body.edit-mode .blog-card:hover .post-delete-btn { display: block; }
+  .post-delete-btn:hover { background: #c04040; color: #fff; }
+
+  /* ── ADD EXP ── */
+  .add-exp-btn {
+    display: none; align-items: center; gap: 0.5rem;
+    border: 1px dashed var(--border-light); padding: 1.5rem 0; cursor: pointer;
+    background: none; color: var(--text-dim); font-family: var(--mono); font-size: 12px;
+    width: 100%; justify-content: center; letter-spacing: 0.08em; transition: all 0.2s; margin-top: 1rem;
+  }
+  body.edit-mode .add-exp-btn { display: flex; }
+  .add-exp-btn:hover { border-color: #f0c040; color: #f0c040; }
+
+  .exp-delete-btn {
+    display: none; font-family: var(--mono); font-size: 10px; color: #c04040;
+    background: none; border: none; cursor: pointer; padding: 0; margin-top: 0.5rem;
+  }
+  body.edit-mode .exp-item:hover .exp-delete-btn { display: block; }
+
+  /* ── ADD SKILL ── */
+  .add-skill-btn {
+    display: none; width: 100%; text-align: left; padding: 0.85rem 0;
+    background: none; border: none; border-bottom: 1px dashed var(--border-light);
+    font-family: var(--mono); font-size: 12px; color: var(--text-dim); cursor: pointer;
+    letter-spacing: 0.08em; transition: color 0.2s;
+  }
+  body.edit-mode .add-skill-btn { display: block; }
+  .add-skill-btn:hover { color: #f0c040; }
+  .skill-delete-btn {
+    display: none; background: none; border: none; color: #c04040; cursor: pointer; font-size: 14px; padding: 0 4px;
+  }
+  body.edit-mode .skill-row:hover .skill-delete-btn { display: block; }
+
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    section { padding: 3rem 1.5rem; }
+    #hero { padding: 1.5rem; }
+    .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .exp-item { grid-template-columns: 1fr; gap: 0.5rem; }
+    footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#hero"><span contenteditable="false" id="nav-name">Alex Morgan</span> <span style="opacity:.4">/</span> portfolio</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#blog">Blog</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="nav-edit-btn" id="editToggle" onclick="toggleEdit()">✎ Edit</button>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-index" contenteditable="false">001 — PORTFOLIO</div>
+  <h1 class="hero-name">
+    <span contenteditable="false" id="hero-firstname">Alex</span><br>
+    <em contenteditable="false" id="hero-lastname">Morgan</em>
+  </h1>
+  <div class="hero-bottom">
+    <p class="hero-tagline" contenteditable="false" id="hero-tagline">Software engineer & systems thinker. I build things that scale, and write about the lessons learned.</p>
+    <div class="hero-scroll">Scroll to explore</div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-label">002 — About</div>
+  <div class="about-grid">
+    <div>
+      <h2 class="section-title" contenteditable="false">A little about me.</h2>
+      <div class="about-bio">
+        <p contenteditable="false">I'm a software engineer with a passion for distributed systems, developer tooling, and the intersection of performance and reliability. I've spent the last several years building infrastructure at scale.</p>
+        <p contenteditable="false">When I'm not writing code, I'm writing about it — exploring ideas around software architecture, engineering culture, and the craft of building good systems.</p>
+      </div>
+    </div>
+    <div>
+      <div class="skills-list" id="skills-list">
+        <div class="skill-row">
+          <span class="skill-name" contenteditable="false">Languages</span>
+          <span class="skill-tag" contenteditable="false">Python · Go · TypeScript · Rust</span>
+          <button class="skill-delete-btn" onclick="deleteSkill(this)" title="Remove">✕</button>
+        </div>
+        <div class="skill-row">
+          <span class="skill-name" contenteditable="false">Infrastructure</span>
+          <span class="skill-tag" contenteditable="false">Kubernetes · Terraform · AWS</span>
+          <button class="skill-delete-btn" onclick="deleteSkill(this)" title="Remove">✕</button>
+        </div>
+        <div class="skill-row">
+          <span class="skill-name" contenteditable="false">Databases</span>
+          <span class="skill-tag" contenteditable="false">PostgreSQL · Redis · Cassandra</span>
+          <button class="skill-delete-btn" onclick="deleteSkill(this)" title="Remove">✕</button>
+        </div>
+        <div class="skill-row">
+          <span class="skill-name" contenteditable="false">Currently exploring</span>
+          <span class="skill-tag" contenteditable="false">WebAssembly · eBPF</span>
+          <button class="skill-delete-btn" onclick="deleteSkill(this)" title="Remove">✕</button>
+        </div>
+      </div>
+      <button class="add-skill-btn" onclick="addSkill()">+ Add skill row</button>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-label">003 — Experience</div>
+  <h2 class="section-title" contenteditable="false">Where I've worked.</h2>
+  <div class="exp-list" id="exp-list">
+    <div class="exp-item">
+      <div class="exp-meta">
+        <strong contenteditable="false">2022 — Present</strong>
+        <span contenteditable="false">Senior Engineer</span><br>
+        <span contenteditable="false">San Francisco, CA</span>
+        <button class="exp-delete-btn" onclick="deleteExp(this)">✕ Remove</button>
+      </div>
+      <div class="exp-content">
+        <h3 contenteditable="false">Acme Corp</h3>
+        <p contenteditable="false">Leading the platform team building internal developer tooling. Reduced deployment times by 60% through pipeline optimization and implemented a new observability stack serving 50M+ events/day.</p>
+      </div>
+    </div>
+    <div class="exp-item">
+      <div class="exp-meta">
+        <strong contenteditable="false">2019 — 2022</strong>
+        <span contenteditable="false">Software Engineer</span><br>
+        <span contenteditable="false">New York, NY</span>
+        <button class="exp-delete-btn" onclick="deleteExp(this)">✕ Remove</button>
+      </div>
+      <div class="exp-content">
+        <h3 contenteditable="false">BuildStack Inc.</h3>
+        <p contenteditable="false">Full-stack engineer on a fintech product. Architected a real-time data processing pipeline in Go, built customer-facing dashboard features, and mentored junior engineers.</p>
+      </div>
+    </div>
+    <div class="exp-item">
+      <div class="exp-meta">
+        <strong contenteditable="false">2017 — 2019</strong>
+        <span contenteditable="false">Junior Developer</span><br>
+        <span contenteditable="false">Remote</span>
+        <button class="exp-delete-btn" onclick="deleteExp(this)">✕ Remove</button>
+      </div>
+      <div class="exp-content">
+        <h3 contenteditable="false">Freelance & Consulting</h3>
+        <p contenteditable="false">Built web applications and APIs for small businesses and startups. Shipped 12+ client projects across e-commerce, SaaS, and internal tooling.</p>
+      </div>
+    </div>
+  </div>
+  <button class="add-exp-btn" onclick="addExp()">+ Add experience</button>
+</section>
+
+<!-- BLOG -->
+<section id="blog">
+  <div class="section-label">004 — Writing</div>
+  <h2 class="section-title" contenteditable="false">Things I think about.</h2>
+  <div class="blog-grid" id="blog-grid">
+    <div class="blog-card" onclick="openPost(this)" data-full="Distributed systems are hard. Not because the concepts are inherently complex, but because the failure modes are subtle and numerous. When a packet drops, when a node goes silent, when clocks drift — your system must make decisions with incomplete information. The key insight I keep returning to is this: design for failure as a first principle, not as an afterthought. This means embracing partial availability over total consistency in many cases, building idempotent operations by default, and instrumenting everything so you can actually see what's happening.">
+      <div class="blog-tag" contenteditable="false">Systems</div>
+      <div class="blog-title" contenteditable="false">The hidden costs of distributed consistency</div>
+      <div class="blog-excerpt" contenteditable="false">Why strong consistency guarantees often cost more than you expect, and when eventual consistency is actually the right call.</div>
+      <div class="blog-date" contenteditable="false">November 2024</div>
+      <span class="blog-arrow">↗</span>
+      <button class="post-delete-btn" onclick="event.stopPropagation(); deletePost(this)">✕</button>
+    </div>
+    <div class="blog-card" onclick="openPost(this)" data-full="Observability is not monitoring. Monitoring tells you when something is wrong. Observability tells you why. The three pillars — metrics, logs, traces — are well-known, but the real challenge is making them actionable. The best observability systems I've worked with share one trait: they're designed around the questions engineers actually ask during incidents, not around what's easy to instrument. Start with your runbooks and work backwards.">
+      <div class="blog-tag" contenteditable="false">Observability</div>
+      <div class="blog-title" contenteditable="false">Building an observability culture, not just infrastructure</div>
+      <div class="blog-excerpt" contenteditable="false">Metrics, logs, and traces are table stakes. The real work is changing how your team thinks about production systems.</div>
+      <div class="blog-date" contenteditable="false">September 2024</div>
+      <span class="blog-arrow">↗</span>
+      <button class="post-delete-btn" onclick="event.stopPropagation(); deletePost(this)">✕</button>
+    </div>
+    <div class="blog-card" onclick="openPost(this)" data-full="The best software I've worked on was built by teams that treated engineering culture as a product. You iterate on it, get feedback, deprecate things that don't work. Practices like blameless postmortems, async-first communication, and documentation-as-code aren't just nice-to-haves — they compound. A team that learns together 5% faster than another will be dramatically more effective over two years. Invest in the culture, and the code takes care of itself.">
+      <div class="blog-tag" contenteditable="false">Culture</div>
+      <div class="blog-title" contenteditable="false">Engineering culture as a compounding asset</div>
+      <div class="blog-excerpt" contenteditable="false">The practices that seem slow in the short term — postmortems, documentation, async communication — are the ones that scale.</div>
+      <div class="blog-date" contenteditable="false">July 2024</div>
+      <span class="blog-arrow">↗</span>
+      <button class="post-delete-btn" onclick="event.stopPropagation(); deletePost(this)">✕</button>
+    </div>
+  </div>
+  <button class="add-post-btn" onclick="addPost()">+ Write a new post</button>
+</section>
+
+<!-- CONTACT & RESUME -->
+<section id="contact">
+  <div class="section-label">005 — Contact & Resume</div>
+  <div class="contact-grid">
+    <div>
+      <p class="contact-cta" contenteditable="false">Let's build something interesting together.</p>
+      <div class="contact-links" id="contact-links">
+        <a href="mailto:alex@example.com" class="contact-link">
+          <span contenteditable="false" onclick="return false">alex@example.com</span>
+          <span>→</span>
+        </a>
+        <a href="https://github.com" class="contact-link" target="_blank">
+          <span contenteditable="false" onclick="return false">GitHub</span>
+          <span>→</span>
+        </a>
+        <a href="https://linkedin.com" class="contact-link" target="_blank">
+          <span contenteditable="false" onclick="return false">LinkedIn</span>
+          <span>→</span>
+        </a>
+        <a href="#" class="contact-link">
+          <span contenteditable="false" onclick="return false">Twitter / X</span>
+          <span>→</span>
+        </a>
+      </div>
+    </div>
+    <div class="resume-section" style="flex-direction:column;align-items:flex-start;gap:1.5rem;">
+      <div class="resume-info">
+        <h3 style="font-family:var(--serif);font-size:1.5rem;font-weight:400;margin-bottom:0.75rem;" contenteditable="false">Resume</h3>
+        <p contenteditable="false">Download my CV for a full overview of my experience, education, and the projects I've shipped. Last updated November 2024.</p>
+      </div>
+      <a href="#" class="resume-btn" id="resume-download" onclick="handleResumeDownload(event)">
+        ↓ &nbsp;Download PDF
+      </a>
+      <div id="resume-upload-area" style="display:none; flex-direction:column; gap:0.75rem; width:100%;">
+        <p style="font-family:var(--mono);font-size:11px;color:var(--text-dim);letter-spacing:0.08em;">UPLOAD YOUR RESUME PDF</p>
+        <input type="file" accept=".pdf" id="resumeFile" onchange="handleResumeUpload(event)" style="font-family:var(--mono);font-size:12px;color:var(--text-muted);background:none;border:1px dashed var(--border-light);padding:0.75rem;width:100%;cursor:pointer;">
+        <p style="font-family:var(--mono);font-size:10px;color:var(--text-dim);">Once uploaded, visitors can download it from this page.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span contenteditable="false">© 2024 Alex Morgan</span>
+  <span style="font-size:10px;">Built with care.</span>
+</footer>
+
+<!-- EDIT HINT -->
+<div class="edit-hint">✎ Edit mode on — click any text to edit it</div>
+
+<!-- BLOG POST MODAL -->
+<div class="modal-backdrop" id="modal" onclick="closeModal(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closePost()">← Back to writing</button>
+    <div class="modal-tag" id="modal-tag"></div>
+    <h2 class="modal-title" id="modal-title"></h2>
+    <div class="modal-meta" id="modal-meta"></div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<script>
+let editMode = false;
+let resumeBlob = null;
+
+function toggleEdit() {
+  editMode = !editMode;
+  document.body.classList.toggle('edit-mode', editMode);
+  const btn = document.getElementById('editToggle');
+  btn.textContent = editMode ? '✓ Done editing' : '✎ Edit';
+  btn.classList.toggle('active', editMode);
+
+  const els = document.querySelectorAll('[contenteditable]');
+  els.forEach(el => el.contentEditable = editMode ? 'true' : 'false');
+
+  // nav name sync
+  if (!editMode) {
+    const fn = document.getElementById('hero-firstname').textContent;
+    const ln = document.getElementById('hero-lastname').textContent;
+    document.getElementById('nav-name').textContent = fn + ' ' + ln;
+  }
+
+  // show/hide resume upload
+  document.getElementById('resume-upload-area').style.display = editMode ? 'flex' : 'none';
+}
+
+function openPost(card) {
+  if (editMode) return;
+  const tag = card.querySelector('.blog-tag').textContent;
+  const title = card.querySelector('.blog-title').textContent;
+  const date = card.querySelector('.blog-date').textContent;
+  const full = card.getAttribute('data-full') || card.querySelector('.blog-excerpt').textContent;
+  document.getElementById('modal-tag').textContent = tag;
+  document.getElementById('modal-title').textContent = title;
+  document.getElementById('modal-meta').textContent = date;
+  document.getElementById('modal-body').innerHTML = '<p>' + full.split('\n').join('</p><p>') + '</p>';
+  document.getElementById('modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closePost() {
+  document.getElementById('modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('modal')) closePost();
+}
+
+function addPost() {
+  const grid = document.getElementById('blog-grid');
+  const card = document.createElement('div');
+  card.className = 'blog-card';
+  card.setAttribute('data-full', 'Write your full article content here. You can expand on your ideas and write as much as you like.');
+  card.onclick = function() { openPost(card); };
+  card.innerHTML = `
+    <div class="blog-tag" contenteditable="${editMode?'true':'false'}">Topic</div>
+    <div class="blog-title" contenteditable="${editMode?'true':'false'}">Your article title</div>
+    <div class="blog-excerpt" contenteditable="${editMode?'true':'false'}">A short summary of what this article is about. Edit this in edit mode.</div>
+    <div class="blog-date" contenteditable="${editMode?'true':'false'}">Month Year</div>
+    <span class="blog-arrow">↗</span>
+    <button class="post-delete-btn" onclick="event.stopPropagation(); deletePost(this)">✕</button>
+  `;
+  grid.appendChild(card);
+}
+
+function deletePost(btn) {
+  if (confirm('Remove this post?')) btn.closest('.blog-card').remove();
+}
+
+function addExp() {
+  const list = document.getElementById('exp-list');
+  const item = document.createElement('div');
+  item.className = 'exp-item';
+  item.innerHTML = `
+    <div class="exp-meta">
+      <strong contenteditable="${editMode?'true':'false'}">Year — Year</strong>
+      <span contenteditable="${editMode?'true':'false'}">Role Title</span><br>
+      <span contenteditable="${editMode?'true':'false'}">Location</span>
+      <button class="exp-delete-btn" onclick="deleteExp(this)">✕ Remove</button>
+    </div>
+    <div class="exp-content">
+      <h3 contenteditable="${editMode?'true':'false'}">Company Name</h3>
+      <p contenteditable="${editMode?'true':'false'}">Describe what you did here, the impact you had, and the technologies you used.</p>
+    </div>
+  `;
+  list.appendChild(item);
+}
+
+function deleteExp(btn) {
+  if (confirm('Remove this experience?')) btn.closest('.exp-item').remove();
+}
+
+function addSkill() {
+  const list = document.getElementById('skills-list');
+  const row = document.createElement('div');
+  row.className = 'skill-row';
+  row.innerHTML = `
+    <span class="skill-name" contenteditable="${editMode?'true':'false'}">Skill category</span>
+    <span class="skill-tag" contenteditable="${editMode?'true':'false'}">Item · Item · Item</span>
+    <button class="skill-delete-btn" onclick="deleteSkill(this)" title="Remove">✕</button>
+  `;
+  list.insertBefore(row, list.querySelector('.add-skill-btn'));
+}
+
+function deleteSkill(btn) {
+  btn.closest('.skill-row').remove();
+}
+
+function handleResumeUpload(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  resumeBlob = URL.createObjectURL(file);
+  const btn = document.getElementById('resume-download');
+  btn.textContent = '↓  ' + file.name;
+  btn.setAttribute('data-ready', 'true');
+}
+
+function handleResumeDownload(e) {
+  if (editMode) return;
+  if (!resumeBlob) {
+    e.preventDefault();
+    alert('No resume uploaded yet. Enable Edit Mode and upload your PDF in the Contact section.');
+  } else {
+    const a = document.createElement('a');
+    a.href = resumeBlob;
+    a.download = 'resume.pdf';
+    a.click();
+    e.preventDefault();
+  }
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closePost();
+});
+</script>
+</body>
+</html>
